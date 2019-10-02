@@ -7,6 +7,7 @@ servers:
 tags:
   - name: depict
   - name: ecaviar
+  - name: gtex
 paths:
   /depict/genepathway/object:
     summary: >
@@ -253,7 +254,7 @@ paths:
       tags: [ecaviar]
       parameters:
         - name: suffix
-          in: query
+          in: path
           required: false
           schema:
             type: string
@@ -333,5 +334,20 @@ paths:
                   prob_in_causal_set: 0.208669
                   clpp: 0.00113929
                   gene: AARD
-  /ecaviar/colocalization_max/object:
-
+  /gtex/gene_weight/{format}:
+    summary: Returns gene/tissue expression data
+    get:
+      tags: [gtex]
+      parameters:
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Returns gene/tissue expression data
+          content:
+            application/json:
+              schema:
+                type: array
