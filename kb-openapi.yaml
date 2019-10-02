@@ -3,13 +3,17 @@ info:
   title: Depict
   version: 1.0.0
 servers:
-  - url: http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/testcalls/depict
+  - url: http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/testcalls
+tags:
+  - name: depict
+  - name: ecaviar
 paths:
-  /genepathway/object:
+  /depict/genepathway/object:
     summary: >
       Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
       with a specified disease, according to the DEPICT method.
     get:
+      tags: [ depict ]
       parameters:
         - name: gene
           in: query
@@ -87,10 +91,11 @@ paths:
                       ZEB1
                     ]
                     dataset: GWAS_DIAMANTE_eu_dv2__T2D
-  /region/object:
+  /depict/region/object:
     summary: >
       Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
     get:
+      tags: [ depict ]
       parameters:
         - name: gene
           in: query
@@ -138,9 +143,10 @@ paths:
                   gene: SLC30A8
                   pvalue: 0.000945569
                   gene_ensemble_id: ENSG00000164756
-  /tissue/object:
+  /depict/tissue/object:
     summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
     get:
+      tags: [ depict ]
       parameters:
         - name: phenotype
           in: query
@@ -187,11 +193,12 @@ paths:
                   pvalue: 0.0297425
                   tissue_name: parietal lobe
                   tissue_uberon_id: ""
-  /pathway/object:
+  /depict/pathway/object:
     summary: >
       Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
       according to the DEPICT method
     get:
+      tags: [ depict ]
       parameters:
         - name: phenotype
           in: query
