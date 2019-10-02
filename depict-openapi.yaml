@@ -138,6 +138,114 @@ paths:
                   gene: SLC30A8
                   pvalue: 0.000945569
                   gene_ensemble_id: ENSG00000164756
+  /tissue/object:
+    summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
+    get:
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: A list of enriched tissues and p-values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [ dataset, phenotype, tissue, mesh_second_level_term, pvalue, tissue_name, tissue_uberon_id ]
+                  properties:
+                    dataset:
+                      type: string
+                    phenotype:
+                      type: string
+                    tissue:
+                      type: string
+                    mesh_second_level_term:
+                      type: string
+                    pvalue:
+                      type: number
+                    tissue_name:
+                      type: string
+                    tissue_uberon_id:
+                      type: string
+              example:
+                - dataset: GWAS_GIANT_active_dv4__BMI
+                  phenotype: BMI
+                  tissue: Serum
+                  mesh_second_level_term: Hemic and Immune Systems
+                  pvalue: 0.0136876
+                  tissue_name: serum
+                  tissue_uberon_id: ""
+                - dataset: GWAS_GIANT_active_dv4__BMI
+                  phenotype: BMI
+                  tissue: Parietal Lobe
+                  mesh_second_level_term: Nervous System
+                  pvalue: 0.0297425
+                  tissue_name: parietal lobe
+                  tissue_uberon_id: ""
+  /pathway/object:
+    summary: >
+      Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
+      according to the DEPICT method
+    get:
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: A list of enriched gene sets and their p-values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [ dataset, phenotype, pathway_id, pathway_description, pvalue ]
+                  properties:
+                    dataset:
+                      type: string
+                    phenotype:
+                      type: string
+                    pathway_id:
+                      type: string
+                    pathway_description:
+                      type: string
+                    pvalue:
+                      type: number
+              example:
+                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                  phenotype: T2D
+                  pathway_id: KEGG_PROSTATE_CANCER
+                  pathway_description: KEGG_PROSTATE_CANCER
+                  pvalue: 5.77832e-7
+                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                  phenotype: T2D
+                  pathway_id: MP:0001698
+                  pathway_description: decreased embryo size
+                  pvalue: 7.56071e-7
+                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                  phenotype: T2D
+                  pathway_id: KEGG_ACUTE_MYELOID_LEUKEMIA
+                  pathway_description: KEGG_ACUTE_MYELOID_LEUKEMIA
+                  pvalue: 9.97704e-7
+                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                  phenotype: T2D
+                  pathway_id: ENSG00000105221
+                  pathway_description: AKT2 subnetwork
+                  pvalue: 0.00000114015
+
+
+
+
+
+
 
 
 
