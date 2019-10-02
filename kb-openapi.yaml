@@ -8,6 +8,7 @@ tags:
   - name: depict
   - name: ecaviar
   - name: gtex
+  - name: knockout
 paths:
   /depict/genepathway/object:
     summary: >
@@ -351,3 +352,72 @@ paths:
             application/json:
               schema:
                 type: array
+  /knockout/object:
+    summary: Returns human gene similars
+    get:
+      tags: [ knockout ]
+      parameters:
+        - name: gene
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Returns human gene similars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [
+                    Input, Input_Type, MGI_Gene_Marker_ID, Symbol, Name, Feature_Type, MP_ID, Term, Human_gene
+                  ]
+                  properties:
+                    Input:
+                      type: string
+                    Input_Type:
+                      type: string
+                    MGI_Gene_Marker_ID:
+                      type: string
+                    Symbol:
+                      type: string
+                    Name:
+                      type: string
+                    Feature_Type:
+                      type: string
+                    MP_ID:
+                      type: string
+                    Term:
+                      type: string
+                    Human_gene:
+                      type: string
+              example:
+                - Input: MGI:2442682
+                  Input_Type: MGI
+                  MGI_Gene_Marker_ID: MGI:2442682
+                  Symbol: Slc30a8
+                  Name: solute carrier family 30 (zinc transporter), member 8
+                  Feature_Type: protein coding gene
+                  MP_ID: MP:0003839
+                  Term: abnormal insulin clearance
+                  Human_gene: SLC30A8
+                - Input: MGI:2442682
+                  Input_Type: MGI
+                  MGI_Gene_Marker_ID: MGI:2442682
+                  Symbol: Slc30a8
+                  Name: solute carrier family 30 (zinc transporter), member 8
+                  Feature_Type: protein coding gene
+                  MP_ID: MP:0005217
+                  Term: abnormal pancreatic beta cell morphology
+                  Human_gene: SLC30A8
+                - Input: MGI:2442682
+                  Input_Type: MGI
+                  MGI_Gene_Marker_ID: MGI:2442682
+                  Symbol: Slc30a8
+                  Name: solute carrier family 30 (zinc transporter), member 8
+                  Feature_Type: protein coding gene
+                  MP_ID: MP:0005370
+                  Term: liver/biliary system phenotype
+                  Human_gene: SLC30A8
