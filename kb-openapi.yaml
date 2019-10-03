@@ -226,7 +226,7 @@ paths:
                   pathway_description: AKT2 subnetwork
                   pvalue: 0.00000114015
   /ecaviar/colocalization{suffix}/object:
-    summary: Returns dataset/phenotype/credible set variant scores
+    summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
       tags: [eCaviar]
       parameters:
@@ -239,7 +239,7 @@ paths:
           example: "_max"
       responses:
         default:
-          description: Returns dataset/phenotype/credible set variant scores
+          description: dataset/phenotype/credible set variant scores
           content:
             application/json:
               schema:
@@ -314,7 +314,7 @@ paths:
               schema:
                 type: array
   /knockout/object:
-    summary: Returns human gene similars
+    summary: Fetch a list of mouse phenotypes (from MGI database) associated with the gene
     get:
       tags: [ Knockout ]
       parameters:
@@ -325,7 +325,7 @@ paths:
           example: SLC30A8
       responses:
         default:
-          description: Returns human gene similars
+          description: A list of phenotype ids and descriptions
           content:
             application/json:
               schema:
@@ -374,9 +374,59 @@ paths:
                   Term: liver/biliary system phenotype
                   Human_gene: SLC30A8
   /ldscore/tissue/object:
-    summary: Returns tissue/phenotype/ancestry data
+    summary: Fetch the tissues enriched for disease associations, according to LD-score regression
     get:
       tags: [ "LD score" ]
-
-
-
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          schema: { type: string }
+          example: T2D
+      responses:
+        default:
+          description: A list of enriched tissues, their effect sizes, and p-values.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: object
+                    required: [ tissue, phenotype, ancestry, coeff, stderr, pvalue, tissue_name, tissue_uberon_id ]
+                    properties:
+                      tissue: { type: string }
+                      phenotype: { type: string}
+                      ancestry: { type: string }
+                      coeff: { type: number }
+                      stderr: { type: number }
+                      pvalue: { type: string }
+                      tissue_name: { type: string, nullable: true }
+                      tissue_uberon_id: { type: string, nullable: true }
+              example:
+                data:
+                  - tissue: Pancreas
+                    phenotype: T2D
+                    ancestry: European
+                    coeff: 3.07894147039e-9
+                    stderr: 9.55106227263e-10
+                    pvalue: 0.000632809231879
+                    tissue_name: pancreas
+                    tissue_uberon_id: UBERON:0001264
+                  - tissue: A10.615.550.Mucous.Membrane
+                    phenotype: T2D
+                    ancestry: European
+                    coeff: -3.01805041521e-9
+                    stderr: 9.24799138468e-10
+                    pvalue: 0.999449707782
+                    tissue_name: null
+                    tissue_uberon_id: null
+                  - tissue: Lung
+                    phenotype: T2D
+                    ancestry: European
+                    coeff: -2.98325557297e-9
+                    stderr: 7.12606248356e-10
+                    pvalue: 0.999985829382
+                    tissue_name: lung
+                    tissue_uberon_id: UBERON:0002048
