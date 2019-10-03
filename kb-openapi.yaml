@@ -15,6 +15,7 @@ tags:
   - name: Meta Analysis
   - name: Phenotype list
   - name: Region
+  - name: Tissue list
 paths:
   /testcalls/depict/genepathway/object:
     summary: >
@@ -731,3 +732,34 @@ paths:
                     annotation: Promoter_Weak
                     tissue_id: CL:0002553
                     tissue_name: fibroblast of lung
+  /graph/tissue/list/object:
+    summary: Returns the list of tissues from the database
+    get:
+      tags: [ "Tissue list" ]
+      parameters: []
+      responses:
+        default:
+          description: Returns the list of tissues from the database
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [ tissue_id, tissue ]
+                      properties:
+                        tissue_id: { type: string }
+                        tissue: { type: string }
+              example:
+                data:
+                  - tissue_id: CL:0000136
+                    tissue: adipocyte
+                  - tissue_id: EFO:0001187
+                    tissue: HepG2
+                  - tissue_id: UBERON:0018112
+                    tissue: rectal smooth muscle
+
