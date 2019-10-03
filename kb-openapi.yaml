@@ -16,6 +16,7 @@ tags:
   - name: Phenotype list
   - name: Region
   - name: Tissue list
+  - name: Variant prioritization
 paths:
   /testcalls/depict/genepathway/object:
     summary: >
@@ -517,6 +518,11 @@ paths:
           required: true
           schema: { type: string }
           example: T2D
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer }
+          example: 10
       responses:
         default:
           description: A list of annotations (tissue and name) as well as their enrichment p-values and effect sizes
@@ -581,6 +587,11 @@ paths:
           required: true
           schema: { type: string }
           example: 8_118184783_A_G
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer }
+          example: 10
       responses:
         default:
           description: the bottom line p-value and effect size for each trait
@@ -691,6 +702,19 @@ paths:
             type: array
             items: { type: string }
           example: [ 1_713337_G_A, 1_713754_G_C, 1_713754_G_C ]
+        - name: tissue
+          in: query
+          required: false
+          schema: { type: string }
+        - name: annotation
+          in: query
+          required: false
+          schema: { type: string }
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer }
+          example: 10
       responses:
         default:
           description: Returns region/tissue annotations given a variant
@@ -762,4 +786,91 @@ paths:
                     tissue: HepG2
                   - tissue_id: UBERON:0018112
                     tissue: rectal smooth muscle
-
+  /graph/prioritization/variant/object:
+    summary: Returns all variants linked to phenotypes with their pValues in the given region
+    get:
+      tags: [ "Variant prioritization" ]
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          schema: { type: string }
+          example: T2D
+        - name: chrom
+          in: query
+          required: true
+          schema: { type: string }
+          example: "8"
+        - name: start_pos
+          in: query
+          required: true
+          schema: { type: integer }
+          example: 117862462
+        - name: end_pos
+          in: query
+          required: true
+          schema: { type: integer }
+          example: 118289003
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer }
+          example: 10
+      responses:
+        default:
+          description: Returns all variants linked to phenotypes with their pValues in the given region
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [
+                        var_id, p_value, standard_error, beta, z_score, consequence, phenotype, impact,
+                        most_del_score
+                      ]
+                      properties:
+                        var_id: { type: string }
+                        p_value: { type: number }
+                        standard_error: { type: number }
+                        beta: { type: number }
+                        z_score: { type: number }
+                        consequence:
+                          type: array
+                          items: { type: string }
+                        phenotype: { type: string }
+                        impact: { type: string }
+                        most_del_score: { type: integer }
+              example:
+                data:
+                  - var_id: 8_118185025_G_A
+                    p_value: 9.71e-121
+                    standard_error: 0.0033
+                    beta: -0.1075
+                    z_score: -23.365
+                    consequence: [ 3_prime_UTR_variant ]
+                    phenotype: T2D
+                    impact: MODIFIER
+                    most_del_score: 4
+                  - var_id: 8_118185733_A_G
+                    p_value: 8.96e-117
+                    standard_error: 0.0033
+                    beta: -0.1052
+                    z_score: -22.972
+                    consequence: [ 3_prime_UTR_variant ]
+                    phenotype: T2D
+                    impact: MODIFIER
+                    most_del_score: 4
+                  - var_id: 8_118185938_A_G
+                    p_value: 4.255e-18
+                    standard_error: 0.0035
+                    beta": 0.051
+                    z_score: 8.672
+                    consequence: [ 3_prime_UTR_variant ]
+                    phenotype: T2D
+                    impact: MODIFIER
+                    most_del_score: 4
