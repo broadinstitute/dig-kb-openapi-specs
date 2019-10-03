@@ -3,7 +3,7 @@ info:
   title: Knowledge Portal Knowledgebase API
   version: 1.0.0
 servers:
-  - url: http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/testcalls
+  - url: http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices
 tags:
   - name: Depict
   - name: eCaviar
@@ -11,8 +11,9 @@ tags:
   - name: Knockout
   - name: LD score
   - name: Magma
+  - name: Gregor
 paths:
-  /depict/genepathway/object:
+  /testcalls/depict/genepathway/object:
     summary: >
       Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
       with a specified disease, according to the DEPICT method.
@@ -89,7 +90,7 @@ paths:
                       ZEB1
                     ]
                     dataset: GWAS_DIAMANTE_eu_dv2__T2D
-  /depict/region/object:
+  /testcalls/depict/region/object:
     summary: >
       Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
     get:
@@ -133,7 +134,7 @@ paths:
                   gene: SLC30A8
                   pvalue: 0.000945569
                   gene_ensemble_id: ENSG00000164756
-  /depict/tissue/object:
+  /testcalls/depict/tissue/object:
     summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
     get:
       tags: [ Depict ]
@@ -176,7 +177,7 @@ paths:
                   pvalue: 0.0297425
                   tissue_name: parietal lobe
                   tissue_uberon_id: ""
-  /depict/pathway/object:
+  /testcalls/depict/pathway/object:
     summary: >
       Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
       according to the DEPICT method
@@ -226,7 +227,7 @@ paths:
                   pathway_id: ENSG00000105221
                   pathway_description: AKT2 subnetwork
                   pvalue: 0.00000114015
-  /ecaviar/colocalization{suffix}/object:
+  /testcalls/ecaviar/colocalization{suffix}/object:
     summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
       tags: [eCaviar]
@@ -298,7 +299,7 @@ paths:
                   prob_in_causal_set: 0.208669
                   clpp: 0.00113929
                   gene: AARD
-  /gtex/gene_weight/{format}:
+  /testcalls/gtex/gene_weight/{format}:
     summary: Returns gene/tissue expression data
     get:
       tags: [GTEx]
@@ -314,7 +315,7 @@ paths:
             application/json:
               schema:
                 type: array
-  /knockout/object:
+  /testcalls/knockout/object:
     summary: Fetch a list of mouse phenotypes (from MGI database) associated with the gene
     get:
       tags: [ Knockout ]
@@ -374,7 +375,7 @@ paths:
                   MP_ID: MP:0005370
                   Term: liver/biliary system phenotype
                   Human_gene: SLC30A8
-  /ldscore/tissue/object:
+  /testcalls/ldscore/tissue/object:
     summary: Fetch the tissues enriched for disease associations, according to LD-score regression
     get:
       tags: [ "LD score" ]
@@ -431,7 +432,7 @@ paths:
                     pvalue: 0.999985829382
                     tissue_name: lung
                     tissue_uberon_id: UBERON:0002048
-  /magma/gene/object:
+  /testcalls/magma/gene/object:
     summary: Fetch gene-level association results for a trait(s), according to MAGMA
     get:
       tags: [ Magma ]
@@ -446,7 +447,7 @@ paths:
           example: [ CHOL, BMI ]
         - name: gene
           in: query
-          required: true
+          required: false
           explode: false
           schema:
             type: array
@@ -502,3 +503,66 @@ paths:
                     zstat: 1.7614
                     pvalue: 0.039087
                     gene_ensemble_id: ENSG00000164756
+  /graph/gregor/phenotype/object:
+    summary: Fetch annotations enriched for trait associations, according to the GREGOR method
+    get:
+      tags: [ Gregor ]
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          schema: { type: string }
+          example: T2D
+      responses:
+        default:
+          description: A list of annotations (tissue and name) as well as their enrichment p-values and effect sizes
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [
+                        phenotype, tissue_id, tissue, ancestry, p_value, in_beb_index_snp, expected_in_beb_index_snp,
+                        annotation
+                      ]
+                      properties:
+                        phenotype: { type: string }
+                        tissue_id: { type: string }
+                        tissue: { type: string }
+                        ancestry: { type: string }
+                        p_value: { type: number }
+                        in_beb_index_snp: { type: integer }
+                        expected_in_beb_index_snp: { type: number }
+                        annontation: { type: string }
+              example:
+                data:
+                  - phenotype: T2D
+                    tissue_id: UBERON:0000006
+                    tissue: islet of Langerhans
+                    ancestry: EU
+                    p_value: 4.25849932680315e-20
+                    in_beb_index_snp: 125
+                    expected_in_beb_index_snp: 63.0121375000542
+                    annotation: Enhancer_Active_1
+                  - phenotype: T2D
+                    tissue_id: UBERON:0014455
+                    tissue: subcutaneous adipose
+                    ancestry: AA
+                    p_value: 1.29739077991975
+                    in_beb_index_snp: 1
+                    expected_in_beb_index_snp: 0.0304601425793908
+                    annotation: Enhancer_Active_1
+                  - phenotype: T2D
+                    tissue_id: UBERON:0000006
+                    tissue: islet of Langerhans
+                    ancestry: HS
+                    p_value: 1.73801915928969
+                    in_beb_index_snp: 4
+                    expected_in_beb_index_snp: 3.95384449839974
+                    annotation: Quiescent-low
+
