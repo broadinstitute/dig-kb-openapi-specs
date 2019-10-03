@@ -9,6 +9,7 @@ tags:
   - name: eCaviar
   - name: GTEx
   - name: Knockout
+  - name: LD score
 paths:
   /depict/genepathway/object:
     summary: >
@@ -20,18 +21,18 @@ paths:
         - name: gene
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: SLC30A8
         - name: phenotype
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: T2D
         - name: lt_value
           in: query
           required: true
-          schema:
-            type: number
+          schema: { type: number }
+          example: 5.0E-4
       responses:
         default:
           description: >
@@ -48,22 +49,16 @@ paths:
                       type: object
                       required: [ pathway_id, phenotype, pathway_description, gene, pvalue, gene_list, dataset ]
                       properties:
-                        pathway_id:
-                          type: string
-                        phenotype:
-                          type: string
-                        pathway_description:
-                          type: string
-                        gene:
-                          type: string
-                        pvalue:
-                          type: number
+                        pathway_id: { type: string }
+                        phenotype: { type: string }
+                        pathway_description: { type: string }
+                        gene: { type: string }
+                        pvalue: { type: number }
                         gene_list:
                           type: array
                           items:
                             type: string
-                        dataset:
-                          type: string
+                        dataset: { type: string }
               example:
                 data:
                   - pathway_id: GO:0015833
@@ -102,13 +97,13 @@ paths:
         - name: gene
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: SLC30A8
         - name: phenotype
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: T2D
       responses:
         default:
           description: A list of potential effector genes and their p-values
@@ -120,22 +115,14 @@ paths:
                   type: object
                   required: [ dataset, pheno, region_chr, region_start, region_end, gene, pvaluegene_ensemble_id ]
                   properties:
-                    dataset:
-                      type: string
-                    pheno:
-                      type: string
-                    region_chr:
-                      type: string
-                    region_start:
-                      type: integer
-                    region_end":
-                      type: integer
-                    gene:
-                      type: string
-                    pvalue:
-                      type: number
-                    gene_ensemble_id:
-                      type: string
+                    dataset: { type: string }
+                    pheno: { type: string }
+                    region_chr: { type: string }
+                    region_start: { type: integer }
+                    region_end": { type: integer }
+                    gene: { type: string }
+                    pvalue: { type: number }
+                    gene_ensemble_id: { type: string }
               example:
                 - dataset: GWAS_DIAMANTE_eu_dv2__T2D
                   pheno: T2D
@@ -153,8 +140,8 @@ paths:
         - name: phenotype
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: BMI
       responses:
         default:
           description: A list of enriched tissues and p-values
@@ -166,20 +153,13 @@ paths:
                   type: object
                   required: [ dataset, phenotype, tissue, mesh_second_level_term, pvalue, tissue_name, tissue_uberon_id ]
                   properties:
-                    dataset:
-                      type: string
-                    phenotype:
-                      type: string
-                    tissue:
-                      type: string
-                    mesh_second_level_term:
-                      type: string
-                    pvalue:
-                      type: number
-                    tissue_name:
-                      type: string
-                    tissue_uberon_id:
-                      type: string
+                    dataset: { type: string }
+                    phenotype: { type: string }
+                    tissue: { type: string }
+                    mesh_second_level_term: { type: string }
+                    pvalue: { type: number }
+                    tissue_name: { type: string }
+                    tissue_uberon_id: { type: string }
               example:
                 - dataset: GWAS_GIANT_active_dv4__BMI
                   phenotype: BMI
@@ -207,6 +187,7 @@ paths:
           required: true
           schema:
             type: string
+          example: T2D
       responses:
         default:
           description: A list of enriched gene sets and their p-values
@@ -218,16 +199,11 @@ paths:
                   type: object
                   required: [ dataset, phenotype, pathway_id, pathway_description, pvalue ]
                   properties:
-                    dataset:
-                      type: string
-                    phenotype:
-                      type: string
-                    pathway_id:
-                      type: string
-                    pathway_description:
-                      type: string
-                    pvalue:
-                      type: number
+                    dataset: { type: string }
+                    phenotype: { type: string }
+                    pathway_id: { type: string }
+                    pathway_description: { type: string }
+                    pvalue: { type: number }
               example:
                 - dataset: GWAS_DIAMANTE_eu_dv2__T2D
                   phenotype: T2D
@@ -260,6 +236,7 @@ paths:
           schema:
             type: string
             enum: ["", "_max"]
+          example: "_max"
       responses:
         default:
           description: Returns dataset/phenotype/credible set variant scores
@@ -274,36 +251,21 @@ paths:
                     dbsnp_id, var_id, gwas_z_score, eqtl_z_score, prob_in_causal_set, clpp, gene
                   ]
                   properties:
-                    dataset:
-                      type: string
-                    phenotype:
-                      type: string
-                    credible_set_id:
-                      type: string
-                    chromosome:
-                      type: string
-                    start_pos:
-                      type: integer
-                    end_pos:
-                      type: integer
-                    tissue:
-                      type: string
-                    gene_ensemble_id:
-                      type: string
-                    dbsnp_id:
-                      type: string
-                    var_id:
-                      type: string
-                    gwas_z_score:
-                      type: number
-                    eqtl_z_score:
-                      type: number
-                    prob_in_causal_set:
-                      type: number
-                    clpp:
-                      type: number
-                    gene:
-                      type: string
+                    dataset: { type: string }
+                    phenotype: { type: string }
+                    credible_set_id: { type: string }
+                    chromosome: { type: string }
+                    start_pos: { type: integer }
+                    end_pos: { type: integer }
+                    tissue: { type: string }
+                    gene_ensemble_id: { type: string }
+                    dbsnp_id: { type: string }
+                    var_id: { type: string }
+                    gwas_z_score: { type: number }
+                    eqtl_z_score: { type: number }
+                    prob_in_causal_set: { type: number }
+                    clpp: { type: number }
+                    gene: { type: string }
               example:
                 - dataset: GWAS_DIAMANTE_eu_dv2__T2D
                   phenotype: T2D
@@ -343,8 +305,7 @@ paths:
         - name: format
           in: path
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       responses:
         default:
           description: Returns gene/tissue expression data
@@ -360,8 +321,8 @@ paths:
         - name: gene
           in: query
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          example: SLC30A8
       responses:
         default:
           description: Returns human gene similars
@@ -375,24 +336,15 @@ paths:
                     Input, Input_Type, MGI_Gene_Marker_ID, Symbol, Name, Feature_Type, MP_ID, Term, Human_gene
                   ]
                   properties:
-                    Input:
-                      type: string
-                    Input_Type:
-                      type: string
-                    MGI_Gene_Marker_ID:
-                      type: string
-                    Symbol:
-                      type: string
-                    Name:
-                      type: string
-                    Feature_Type:
-                      type: string
-                    MP_ID:
-                      type: string
-                    Term:
-                      type: string
-                    Human_gene:
-                      type: string
+                    Input: { type: string }
+                    Input_Type: { type: string }
+                    MGI_Gene_Marker_ID: { type: string }
+                    Symbol: { type: string }
+                    Name: { type: string }
+                    Feature_Type: { type: string }
+                    MP_ID: { type: string }
+                    Term: { type: string }
+                    Human_gene: { type: string }
               example:
                 - Input: MGI:2442682
                   Input_Type: MGI
@@ -421,3 +373,10 @@ paths:
                   MP_ID: MP:0005370
                   Term: liver/biliary system phenotype
                   Human_gene: SLC30A8
+  /ldscore/tissue/object:
+    summary: Returns tissue/phenotype/ancestry data
+    get:
+      tags: [ "LD score" ]
+
+
+
