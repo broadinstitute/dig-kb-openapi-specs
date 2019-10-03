@@ -12,6 +12,8 @@ tags:
   - name: LD score
   - name: Magma
   - name: Gregor
+  - name: Meta Analysis
+  - name: Phenotype list
 paths:
   /testcalls/depict/genepathway/object:
     summary: >
@@ -565,4 +567,115 @@ paths:
                     in_beb_index_snp: 4
                     expected_in_beb_index_snp: 3.95384449839974
                     annotation: Quiescent-low
+  /graph/meta/variant/object:
+    summary: >
+      Return the “bottom-line’ p-value for a variant, as calculated by the AMP-T2D Knowledge Portal’s analysis
+      platform
+    get:
+      tags: [ "Meta Analysis" ]
+      parameters:
+        - name: var_id
+          in: query
+          required: true
+          schema: { type: string }
+          example: 8_118184783_A_G
+      responses:
+        default:
+          description: the bottom line p-value and effect size for each trait
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [
+                        p_value, std_err, beta, number_samples, chrom, pos, ref, alt, phenotype, phenotype_group
+                      ]
+                      properties:
+                        p_value: { type: number }
+                        std_err: { type: number }
+                        beta: { type: number }
+                        number_samples: { type: integer }
+                        chrom: { type: string }
+                        pos: { type: integer }
+                        ref: { type: string }
+                        alt: { type: string }
+                        phenotype: { type: string }
+                        phenotype_group: { type: string }
+              example:
+                data:
+                  - p_value: 4.911e-80
+                    std_err: 0.0033
+                    beta: -0.107
+                    number_samples: 2247110
+                    chrom: "8"
+                    pos: 118184783
+                    ref: C
+                    alt: T
+                    phenotype: T2D
+                    phenotype_group: GLYCEMIC
+                  - p_value: 2.624e-63
+                    std_err: 0.0047
+                    beta: -0.1077
+                    number_samples: 1181250
+                    chrom: "8"
+                    pos: 118184783
+                    ref: C
+                    alt: T
+                    phenotype: T2DadjBMI
+                    phenotype_group: GLYCEMIC
+                  - p_value: 0.9961
+                    std_err: 0.0414
+                    beta: -0.0002
+                    number_samples: 1797
+                    chrom: "8"
+                    pos: 118184783
+                    ref: C
+                    alt: T
+                    phenotype: FGadjAgeSex
+                    phenotype_group: GLYCEMIC
+  /graph/phenotype/list/object:
+    summary: Returns the list of phenotypes from the database
+    get:
+      tags: [ "Phenotype list" ]
+      parameters: []
+      responses:
+        default:
+          description: Returns the list of phenotypes from the database
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [ group, phenotype_id, name, is_dichotomous ]
+                      properties:
+                        group: { type: string }
+                        phenotype_id: { type: string }
+                        name: { type: string }
+                        is_dichotomous: { type: boolean }
+              example:
+                data:
+                  - group: GLYCEMIC
+                    phenotype_id: 2hrCPEP
+                    name: Two-hour C-peptide
+                    is_dichotomous: false
+                  - group: LIPIDS
+                    phenotype_id: 2hrFFA
+                    name: 2hr plasma free fatty acids
+                    is_dichotomous: false
+                  - group: ISCHEMIC STROKE
+                    phenotype_id: toastUNDETER
+                    name: TOAST other undetermined
+                    is_dichotomous: true
+
+
 
