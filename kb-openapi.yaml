@@ -1,21 +1,21 @@
 openapi: "3.0.2"
 info:
-  title: Depict
+  title: Knowledge Portal Knowledgebase API
   version: 1.0.0
 servers:
   - url: http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/testcalls
 tags:
-  - name: depict
-  - name: ecaviar
-  - name: gtex
-  - name: knockout
+  - name: Depict
+  - name: eCaviar
+  - name: GTEx
+  - name: Knockout
 paths:
   /depict/genepathway/object:
     summary: >
       Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
       with a specified disease, according to the DEPICT method.
     get:
-      tags: [ depict ]
+      tags: [ Depict ]
       parameters:
         - name: gene
           in: query
@@ -97,7 +97,7 @@ paths:
     summary: >
       Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
     get:
-      tags: [ depict ]
+      tags: [ Depict ]
       parameters:
         - name: gene
           in: query
@@ -148,7 +148,7 @@ paths:
   /depict/tissue/object:
     summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
     get:
-      tags: [ depict ]
+      tags: [ Depict ]
       parameters:
         - name: phenotype
           in: query
@@ -200,7 +200,7 @@ paths:
       Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
       according to the DEPICT method
     get:
-      tags: [ depict ]
+      tags: [ Depict ]
       parameters:
         - name: phenotype
           in: query
@@ -252,14 +252,14 @@ paths:
   /ecaviar/colocalization{suffix}/object:
     summary: Returns dataset/phenotype/credible set variant scores
     get:
-      tags: [ecaviar]
+      tags: [eCaviar]
       parameters:
         - name: suffix
           in: path
-          required: false
+          required: true
           schema:
             type: string
-            enum: ["_max"]
+            enum: ["", "_max"]
       responses:
         default:
           description: Returns dataset/phenotype/credible set variant scores
@@ -338,7 +338,7 @@ paths:
   /gtex/gene_weight/{format}:
     summary: Returns gene/tissue expression data
     get:
-      tags: [gtex]
+      tags: [GTEx]
       parameters:
         - name: format
           in: path
@@ -355,7 +355,7 @@ paths:
   /knockout/object:
     summary: Returns human gene similars
     get:
-      tags: [ knockout ]
+      tags: [ Knockout ]
       parameters:
         - name: gene
           in: query
