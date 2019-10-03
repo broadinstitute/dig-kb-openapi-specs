@@ -10,6 +10,7 @@ tags:
   - name: GTEx
   - name: Knockout
   - name: LD score
+  - name: Magma
 paths:
   /depict/genepathway/object:
     summary: >
@@ -430,3 +431,74 @@ paths:
                     pvalue: 0.999985829382
                     tissue_name: lung
                     tissue_uberon_id: UBERON:0002048
+  /magma/gene/object:
+    summary: Fetch gene-level association results for a trait(s), according to MAGMA
+    get:
+      tags: [ Magma ]
+      parameters:
+        - name: phenotype
+          in: query
+          required: true
+          explode: false
+          schema:
+            type: array
+            items: { type: string }
+          example: [ CHOL, BMI ]
+        - name: gene
+          in: query
+          required: true
+          explode: false
+          schema:
+            type: array
+            items: { type: string}
+          example: [ PPARG, SLC30A8 ]
+      responses:
+        default:
+          description: A list of associated genes and their p-values
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: object
+                    required: [ gene, phenotype, ancestry, nsnps, zstat, pvalue, gene_ensemble_id ]
+                    properties:
+                      gene: { type: string }
+                      phenotype: { type: string }
+                      ancestry: { type: string }
+                      nsnps: { type: integer }
+                      zstats: { type: number }
+                      pvalue: { type: number }
+                      gene_ensemble_id: { type: string }
+              example:
+                data:
+                  - gene: PPARG
+                    phenotype: CHOL
+                    ancestry: Mixed
+                    nsnps: 306
+                    zstat: 7.0971
+                    pvalue: 6.3691e-13
+                    gene_ensemble_id: ENSG00000132170
+                  - gene: PPARG
+                    phenotype: BMI
+                    ancestry: Mixed
+                    nsnps: 215
+                    zstat: 6.5613
+                    pvalue: 2.6662e-11
+                    gene_ensemble_id: ENSG00000132170
+                  - gene: SLC30A8
+                    phenotype: CHOL
+                    ancestry: Mixed
+                    nsnps: 343
+                    zstat: -0.6555
+                    pvalue: 0.74393
+                    gene_ensemble_id: ENSG00000164756
+                  - gene: SLC30A8
+                    phenotype: BMI
+                    ancestry: Mixed
+                    nsnps: 320
+                    zstat: 1.7614
+                    pvalue: 0.039087
+                    gene_ensemble_id: ENSG00000164756
