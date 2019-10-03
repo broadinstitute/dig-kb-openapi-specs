@@ -14,6 +14,7 @@ tags:
   - name: Gregor
   - name: Meta Analysis
   - name: Phenotype list
+  - name: Region
 paths:
   /testcalls/depict/genepathway/object:
     summary: >
@@ -676,6 +677,57 @@ paths:
                     phenotype_id: toastUNDETER
                     name: TOAST other undetermined
                     is_dichotomous: true
-
-
-
+  /graph/region/variant/object:
+    summary: Returns region/tissue annotations given a variant
+    get:
+      tags: [ Region ]
+      parameters:
+        - name: var_id
+          in: query
+          required: true
+          explode: false
+          schema:
+            type: array
+            items: { type: string }
+          example: [ 1_713337_G_A, 1_713754_G_C, 1_713754_G_C ]
+      responses:
+        default:
+          description: Returns region/tissue annotations given a variant
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [ start, end, chrom, annotation, tissue_id, tissue_name ]
+                      properties:
+                        start: { type: integer }
+                        end: { type: integer }
+                        chrom: { type: string }
+                        annotation: { type: string }
+                        tissue_id: { type: string }
+                        tissue_name: { type: string }
+              example:
+                data:
+                  - start: 761400
+                    end: 761800
+                    chrom: "1"
+                    annotation: Transcription_Weak
+                    tissue_id: UBERON:0018112
+                    tissue_name: rectal smooth muscle
+                  - start: 714600
+                    end: 715200
+                    chrom: "1"
+                    annotation: Promoter_Weak
+                    tissue_id: UBERON:0018112
+                    tissue_name: rectal smooth muscle
+                  - start: 714600
+                    end: 715200
+                    chrom: "1"
+                    annotation: Promoter_Weak
+                    tissue_id: CL:0002553
+                    tissue_name: fibroblast of lung
