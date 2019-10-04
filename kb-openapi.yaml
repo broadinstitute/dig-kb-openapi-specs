@@ -17,6 +17,122 @@ tags:
   - name: Region
   - name: Tissue list
   - name: Variant prioritization
+components:
+  schemas:
+    depictGenePathwayPair:
+      type: object
+      required: [ pathway_id, phenotype, pathway_description, gene, pvalue, gene_list, dataset ]
+      properties:
+        pathway_id: { type: string }
+        phenotype: { type: string }
+        pathway_description: { type: string }
+        gene: { type: string }
+        pvalue: { type: number }
+        gene_list:
+          type: array
+          items:
+            type: string
+        dataset: { type: string }
+  parameters:
+    gene:
+      name: gene
+      in: query
+      required: true
+      schema: { type: string }
+      example: SLC30A8
+    genes:
+      name: gene
+      in: query
+      required: false
+      explode: false
+      schema:
+        type: array
+        items: { type: string}
+      example: [ PPARG, SLC30A8 ]
+    phenotype:
+      name: phenotype
+      in: query
+      required: true
+      schema: { type: string }
+      example: T2D
+    phenotype2:
+      name: phenotype
+      in: query
+      required: true
+      schema: { type: string }
+      example: BMI
+    phenotypes:
+      name: phenotype
+      in: query
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: { type: string }
+      example: [ CHOL, BMI ]
+    lt_value:
+      name: lt_value
+      in: query
+      required: true
+      schema: { type: number }
+      example: 5.0E-4
+    coloc_suffix:
+      name: suffix
+      in: path
+      required: true
+      schema:
+        type: string
+        enum: ["", "_max"]
+      example: "_max"
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema: { type: integer }
+      example: 10
+    var_id:
+      name: var_id
+      in: query
+      required: true
+      schema: { type: string }
+      example: 8_118184783_A_G
+    var_ids:
+      name: var_id
+      in: query
+      required: true
+      explode: false
+      schema:
+        type: array
+        items: { type: string }
+      example: [ 1_713337_G_A, 1_713754_G_C, 1_713754_G_C ]
+    tissue:
+      name: tissue
+      in: query
+      required: false
+      schema: { type: string }
+    annotation:
+      name: annotation
+      in: query
+      required: false
+      schema: { type: string }
+    chrom:
+      name: chrom
+      in: query
+      required: true
+      schema: { type: string }
+      example: "8"
+    start_pos:
+      name: start_pos
+      in: query
+      required: true
+      schema: { type: integer }
+      example: 117862462
+    end_pos:
+      name: end_pos
+      in: query
+      required: true
+      schema: { type: integer }
+      example: 118289003
 paths:
   /testcalls/depict/genepathway/object:
     summary: >
@@ -25,21 +141,9 @@ paths:
     get:
       tags: [ Depict ]
       parameters:
-        - name: gene
-          in: query
-          required: true
-          schema: { type: string }
-          example: SLC30A8
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: T2D
-        - name: lt_value
-          in: query
-          required: true
-          schema: { type: number }
-          example: 5.0E-4
+        - { "$ref": "#/components/parameters/gene" }
+        - { "$ref": "#/components/parameters/phenotype" }
+        - { "$ref": "#/components/parameters/lt_value" }
       responses:
         default:
           description: >
@@ -52,20 +156,7 @@ paths:
                 properties:
                   data:
                     type: array
-                    items:
-                      type: object
-                      required: [ pathway_id, phenotype, pathway_description, gene, pvalue, gene_list, dataset ]
-                      properties:
-                        pathway_id: { type: string }
-                        phenotype: { type: string }
-                        pathway_description: { type: string }
-                        gene: { type: string }
-                        pvalue: { type: number }
-                        gene_list:
-                          type: array
-                          items:
-                            type: string
-                        dataset: { type: string }
+                    items: { "$ref": "#/components/schemas/depictGenePathwayPair"}
               example:
                 data:
                   - pathway_id: GO:0015833
@@ -101,16 +192,8 @@ paths:
     get:
       tags: [ Depict ]
       parameters:
-        - name: gene
-          in: query
-          required: true
-          schema: { type: string }
-          example: SLC30A8
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: T2D
+        - { "$ref": "#/components/parameters/gene" }
+        - { "$ref": "#/components/parameters/phenotype" }
       responses:
         default:
           description: A list of potential effector genes and their p-values
@@ -144,11 +227,7 @@ paths:
     get:
       tags: [ Depict ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: BMI
+        - { "$ref": "#/components/parameters/phenotype2" }
       responses:
         default:
           description: A list of enriched tissues and p-values
@@ -189,12 +268,7 @@ paths:
     get:
       tags: [ Depict ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          schema:
-            type: string
-          example: T2D
+        - { "$ref": "#/components/parameters/phenotype" }
       responses:
         default:
           description: A list of enriched gene sets and their p-values
@@ -237,13 +311,7 @@ paths:
     get:
       tags: [eCaviar]
       parameters:
-        - name: suffix
-          in: path
-          required: true
-          schema:
-            type: string
-            enum: ["", "_max"]
-          example: "_max"
+        - { "$ref": "#/components/parameters/coloc_suffix"}
       responses:
         default:
           description: dataset/phenotype/credible set variant scores
@@ -304,15 +372,11 @@ paths:
                   prob_in_causal_set: 0.208669
                   clpp: 0.00113929
                   gene: AARD
-  /testcalls/gtex/gene_weight/{format}:
+  /testcalls/gtex/gene_weight/array:
     summary: Returns gene/tissue expression data
     get:
       tags: [GTEx]
-      parameters:
-        - name: format
-          in: path
-          required: true
-          schema: { type: string }
+      parameters: []
       responses:
         default:
           description: Returns gene/tissue expression data
@@ -320,16 +384,13 @@ paths:
             application/json:
               schema:
                 type: array
+                items: { type: object }
   /testcalls/knockout/object:
     summary: Fetch a list of mouse phenotypes (from MGI database) associated with the gene
     get:
       tags: [ Knockout ]
       parameters:
-        - name: gene
-          in: query
-          required: true
-          schema: { type: string }
-          example: SLC30A8
+        - { "$ref": "#/components/parameters/gene" }
       responses:
         default:
           description: A list of phenotype ids and descriptions
@@ -385,11 +446,7 @@ paths:
     get:
       tags: [ "LD score" ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: T2D
+        - { "$ref": "#/components/parameters/phenotype" }
       responses:
         default:
           description: A list of enriched tissues, their effect sizes, and p-values.
@@ -442,22 +499,8 @@ paths:
     get:
       tags: [ Magma ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          explode: false
-          schema:
-            type: array
-            items: { type: string }
-          example: [ CHOL, BMI ]
-        - name: gene
-          in: query
-          required: false
-          explode: false
-          schema:
-            type: array
-            items: { type: string}
-          example: [ PPARG, SLC30A8 ]
+        - { "$ref": "#/components/parameters/phenotypes" }
+        - { "$ref": "#/components/parameters/genes" }
       responses:
         default:
           description: A list of associated genes and their p-values
@@ -513,16 +556,8 @@ paths:
     get:
       tags: [ Gregor ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: T2D
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer }
-          example: 10
+        - { "$ref": "#/components/parameters/phenotype" }
+        - { "$ref": "#/components/parameters/limit" }
       responses:
         default:
           description: A list of annotations (tissue and name) as well as their enrichment p-values and effect sizes
@@ -582,16 +617,8 @@ paths:
     get:
       tags: [ "Meta Analysis" ]
       parameters:
-        - name: var_id
-          in: query
-          required: true
-          schema: { type: string }
-          example: 8_118184783_A_G
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer }
-          example: 10
+        - { "$ref": "#/components/parameters/var_id" }
+        - { "$ref": "#/components/parameters/limit" }
       responses:
         default:
           description: the bottom line p-value and effect size for each trait
@@ -694,27 +721,10 @@ paths:
     get:
       tags: [ Region ]
       parameters:
-        - name: var_id
-          in: query
-          required: true
-          explode: false
-          schema:
-            type: array
-            items: { type: string }
-          example: [ 1_713337_G_A, 1_713754_G_C, 1_713754_G_C ]
-        - name: tissue
-          in: query
-          required: false
-          schema: { type: string }
-        - name: annotation
-          in: query
-          required: false
-          schema: { type: string }
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer }
-          example: 10
+        - { "$ref": "#/components/parameters/var_ids" }
+        - { "$ref": "#/components/parameters/tissue" }
+        - { "$ref": "#/components/parameters/annotation" }
+        - { "$ref": "#/components/parameters/limit" }
       responses:
         default:
           description: Returns region/tissue annotations given a variant
@@ -791,31 +801,11 @@ paths:
     get:
       tags: [ "Variant prioritization" ]
       parameters:
-        - name: phenotype
-          in: query
-          required: true
-          schema: { type: string }
-          example: T2D
-        - name: chrom
-          in: query
-          required: true
-          schema: { type: string }
-          example: "8"
-        - name: start_pos
-          in: query
-          required: true
-          schema: { type: integer }
-          example: 117862462
-        - name: end_pos
-          in: query
-          required: true
-          schema: { type: integer }
-          example: 118289003
-        - name: limit
-          in: query
-          required: false
-          schema: { type: integer }
-          example: 10
+        - { "$ref": "#/components/parameters/phenotype"}
+        - { "$ref": "#/components/parameters/chrom"}
+        - { "$ref": "#/components/parameters/start_pos"}
+        - { "$ref": "#/components/parameters/end_pos"}
+        - { "$ref": "#/components/parameters/limit" }
       responses:
         default:
           description: Returns all variants linked to phenotypes with their pValues in the given region
