@@ -33,6 +33,40 @@ components:
           items:
             type: string
         dataset: { type: string }
+    depictEffectorGene:
+      type: object
+      required: [ dataset, pheno, region_chr, region_start, region_end, gene, pvaluegene_ensemble_id ]
+      properties:
+        dataset: { type: string }
+        pheno: { type: string }
+        region_chr: { type: string }
+        region_start: { type: integer }
+        region_end": { type: integer }
+        gene: { type: string }
+        pvalue: { type: number }
+        gene_ensemble_id: { type: string }
+    depictEnrichedTissue:
+      type: object
+      required: [
+        dataset, phenotype, tissue, mesh_second_level_term, pvalue, tissue_name, tissue_uberon_id
+      ]
+      properties:
+        dataset: { type: string }
+        phenotype: { type: string }
+        tissue: { type: string }
+        mesh_second_level_term: { type: string }
+        pvalue: { type: number }
+        tissue_name: { type: string }
+        tissue_uberon_id: { type: string }
+    depictGeneSet:
+      type: object
+      required: [ dataset, phenotype, pathway_id, pathway_description, pvalue ]
+      properties:
+        dataset: { type: string }
+        phenotype: { type: string }
+        pathway_id: { type: string }
+        pathway_description: { type: string }
+        pvalue: { type: number }
   parameters:
     gene:
       name: gene
@@ -134,6 +168,53 @@ components:
       schema: { type: integer }
       example: 118289003
 paths:
+  /testcalls/depict/genepathway/array:
+    summary: >
+      Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
+      with a specified disease, according to the DEPICT method.
+    get:
+      tags: [ Depict ]
+      parameters:
+        - { "$ref": "#/components/parameters/gene" }
+        - { "$ref": "#/components/parameters/phenotype" }
+        - { "$ref": "#/components/parameters/lt_value" }
+      responses:
+        default:
+          description: >
+            The predicted gene/pathway pairs, and significance, as well as other genes in the pathway.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { "$ref": "#/components/schemas/depictGenePathwayPair"}
+              example:
+                - pathway_id: GO:0015833
+                  phenotype": T2D
+                  pathway_description: peptide transport
+                  gene: SLC30A8
+                  pvalue: 0.000293383
+                  gene_list: [
+                    AACS, ABCA1, ABCB9, ABCC8, ACVR1C, TCF7L2, TFAP2B, TNF, TRH, TRPV1, TRPV4, UCN3, UTS2, VAMP2,
+                    VGF
+                  ]
+                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                - pathway_id: GO:0042803
+                  phenotype: T2D
+                  pathway_description: protein homodimerization activity
+                  gene: SLC30A8
+                  pvalue: 0.000415999
+                  gene_list: [ AADAT,  ABAT, YARS2,  ZBTB16, ZBTB7B, ZNF174, ZNF423 ]
+                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                - pathway_id: MP:0005293
+                  phenotype: T2D
+                  pathway_description: impaired glucose tolerance
+                  gene: SLC30A8
+                  pvalue: 0.000213059
+                  gene_list: [
+                    ABCC8, ACADVL, ADCYAP1R1, ADIPOQ, ADIPOR1, ADIPOR2, TBC1D4, TGM2, THRA, UNC13A, VIPR1, WFS1,
+                    ZEB1
+                  ]
+                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
   /testcalls/depict/genepathway/object:
     summary: >
       Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
@@ -186,6 +267,36 @@ paths:
                       ZEB1
                     ]
                     dataset: GWAS_DIAMANTE_eu_dv2__T2D
+  /testcalls/depict/region/array:
+    summary: >
+      Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
+    get:
+      tags: [ Depict ]
+      parameters:
+        - { "$ref": "#/components/parameters/gene" }
+        - { "$ref": "#/components/parameters/phenotype" }
+      responses:
+        default:
+          description: A list of potential effector genes and their p-values
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items: { "$ref": "#/components/schemas/depictEffectorGene" }
+              example:
+                data:
+                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                    pheno: T2D
+                    region_chr: "8"
+                    region_start: 117962512
+                    region_end: 118188953
+                    gene: SLC30A8
+                    pvalue: 0.000945569
+                    gene_ensemble_id: ENSG00000164756
   /testcalls/depict/region/object:
     summary: >
       Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
@@ -201,18 +312,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  type: object
-                  required: [ dataset, pheno, region_chr, region_start, region_end, gene, pvaluegene_ensemble_id ]
-                  properties:
-                    dataset: { type: string }
-                    pheno: { type: string }
-                    region_chr: { type: string }
-                    region_start: { type: integer }
-                    region_end": { type: integer }
-                    gene: { type: string }
-                    pvalue: { type: number }
-                    gene_ensemble_id: { type: string }
+                items: { "$ref": "#/components/schemas/depictEffectorGene" }
               example:
                 - dataset: GWAS_DIAMANTE_eu_dv2__T2D
                   pheno: T2D
@@ -222,6 +322,40 @@ paths:
                   gene: SLC30A8
                   pvalue: 0.000945569
                   gene_ensemble_id: ENSG00000164756
+  /testcalls/depict/tissue/array:
+    summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
+    get:
+      tags: [ Depict ]
+      parameters:
+        - { "$ref": "#/components/parameters/phenotype2" }
+      responses:
+        default:
+          description: A list of enriched tissues and p-values
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items: { "$ref": "#/components/schemas/depictEnrichedTissue" }
+              example:
+                data:
+                  - dataset: GWAS_GIANT_active_dv4__BMI
+                    phenotype: BMI
+                    tissue: Serum
+                    mesh_second_level_term: Hemic and Immune Systems
+                    pvalue: 0.0136876
+                    tissue_name: serum
+                    tissue_uberon_id: ""
+                  - dataset: GWAS_GIANT_active_dv4__BMI
+                    phenotype: BMI
+                    tissue: Parietal Lobe
+                    mesh_second_level_term: Nervous System
+                    pvalue: 0.0297425
+                    tissue_name: parietal lobe
+                    tissue_uberon_id: ""
   /testcalls/depict/tissue/object:
     summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
     get:
@@ -235,17 +369,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  type: object
-                  required: [ dataset, phenotype, tissue, mesh_second_level_term, pvalue, tissue_name, tissue_uberon_id ]
-                  properties:
-                    dataset: { type: string }
-                    phenotype: { type: string }
-                    tissue: { type: string }
-                    mesh_second_level_term: { type: string }
-                    pvalue: { type: number }
-                    tissue_name: { type: string }
-                    tissue_uberon_id: { type: string }
+                items: { "$ref": "#/components/schemas/depictEnrichedTissue" }
               example:
                 - dataset: GWAS_GIANT_active_dv4__BMI
                   phenotype: BMI
@@ -261,7 +385,7 @@ paths:
                   pvalue: 0.0297425
                   tissue_name: parietal lobe
                   tissue_uberon_id: ""
-  /testcalls/depict/pathway/object:
+  /testcalls/depict/pathway/array:
     summary: >
       Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
       according to the DEPICT method
@@ -276,15 +400,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  type: object
-                  required: [ dataset, phenotype, pathway_id, pathway_description, pvalue ]
-                  properties:
-                    dataset: { type: string }
-                    phenotype: { type: string }
-                    pathway_id: { type: string }
-                    pathway_description: { type: string }
-                    pvalue: { type: number }
+                items: { "$ref": "#/components/schemas/depictGeneSet" }
               example:
                 - dataset: GWAS_DIAMANTE_eu_dv2__T2D
                   phenotype: T2D
@@ -306,6 +422,48 @@ paths:
                   pathway_id: ENSG00000105221
                   pathway_description: AKT2 subnetwork
                   pvalue: 0.00000114015
+  /testcalls/depict/pathway/object:
+    summary: >
+      Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
+      according to the DEPICT method
+    get:
+      tags: [ Depict ]
+      parameters:
+        - { "$ref": "#/components/parameters/phenotype" }
+      responses:
+        default:
+          description: A list of enriched gene sets and their p-values
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items: { "$ref": "#/components/schemas/depictGeneSet" }
+              example:
+                data:
+                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                    phenotype: T2D
+                    pathway_id: KEGG_PROSTATE_CANCER
+                    pathway_description: KEGG_PROSTATE_CANCER
+                    pvalue: 5.77832e-7
+                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                    phenotype: T2D
+                    pathway_id: MP:0001698
+                    pathway_description: decreased embryo size
+                    pvalue: 7.56071e-7
+                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                    phenotype: T2D
+                    pathway_id: KEGG_ACUTE_MYELOID_LEUKEMIA
+                    pathway_description: KEGG_ACUTE_MYELOID_LEUKEMIA
+                    pvalue: 9.97704e-7
+                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                    phenotype: T2D
+                    pathway_id: ENSG00000105221
+                    pathway_description: AKT2 subnetwork
+                    pvalue: 0.00000114015
   /testcalls/ecaviar/colocalization{suffix}/object:
     summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
