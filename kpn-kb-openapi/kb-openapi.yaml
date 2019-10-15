@@ -251,6 +251,12 @@ components:
       required: true
       schema: { type: string }
       example: SLC30A8
+    gene2:
+      name: gene
+      in: query
+      required: true
+      schema: { type: string }
+      example: AARD
     genes:
       name: gene
       in: query
@@ -287,13 +293,13 @@ components:
       required: true
       schema: { type: number }
       example: 5.0E-4
-    coloc_suffix:
-      name: suffix
+    colocalization:
+      name: colocalization
       in: path
       required: true
       schema:
         type: string
-        enum: ["", "_max"]
+        enum: ["colocalization", "colocalization_max"]
       example: "_max"
     limit:
       name: limit
@@ -453,7 +459,7 @@ paths:
               example:
                 data:
                   - pathway_id: GO:0015833
-                    phenotype": T2D
+                    phenotype: T2D
                     pathway_description: peptide transport
                     gene: SLC30A8
                     pvalue: 0.000293383
@@ -663,12 +669,14 @@ paths:
                     pathway_id: ENSG00000105221
                     pathway_description: AKT2 subnetwork
                     pvalue: 0.00000114015
-  /testcalls/ecaviar/colocalization{suffix}/array:
+  /testcalls/ecaviar/{colocalization}/array:
     summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
       tags: [eCaviar]
       parameters:
-        - { "$ref": "#/components/parameters/coloc_suffix"}
+        - { "$ref": "#/components/parameters/colocalization"}
+        - { "$ref": "#/components/parameters/gene2"}
+        - { "$ref": "#/components/parameters/phenotype"}
       responses:
         default:
           description: dataset/phenotype/credible set variant scores
@@ -691,12 +699,14 @@ paths:
                     maxItems: 15
                     items:
                       type: string
-  /testcalls/ecaviar/colocalization{suffix}/object:
+  /testcalls/ecaviar/{colocalization}/object:
     summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
       tags: [eCaviar]
       parameters:
-        - { "$ref": "#/components/parameters/coloc_suffix"}
+        - { "$ref": "#/components/parameters/colocalization"}
+        - { "$ref": "#/components/parameters/gene2"}
+        - { "$ref": "#/components/parameters/phenotype"}
       responses:
         default:
           description: dataset/phenotype/credible set variant scores
