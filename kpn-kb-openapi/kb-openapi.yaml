@@ -411,36 +411,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/DepictGenePathwayPair"}
-              example:
-                - pathway_id: GO:0015833
-                  phenotype": T2D
-                  pathway_description: peptide transport
-                  gene: SLC30A8
-                  pvalue: 0.000293383
-                  gene_list: [
-                    AACS, ABCA1, ABCB9, ABCC8, ACVR1C, TCF7L2, TFAP2B, TNF, TRH, TRPV1, TRPV4, UCN3, UTS2, VAMP2,
-                    VGF
-                  ]
-                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                - pathway_id: GO:0042803
-                  phenotype: T2D
-                  pathway_description: protein homodimerization activity
-                  gene: SLC30A8
-                  pvalue: 0.000415999
-                  gene_list: [ AADAT,  ABAT, YARS2,  ZBTB16, ZBTB7B, ZNF174, ZNF423 ]
-                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                - pathway_id: MP:0005293
-                  phenotype: T2D
-                  pathway_description: impaired glucose tolerance
-                  gene: SLC30A8
-                  pvalue: 0.000213059
-                  gene_list: [
-                    ABCC8, ACADVL, ADCYAP1R1, ADIPOQ, ADIPOR1, ADIPOR2, TBC1D4, TGM2, THRA, UNC13A, VIPR1, WFS1,
-                    ZEB1
-                  ]
-                  dataset: GWAS_DIAMANTE_eu_dv2__T2D
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: string
   /testcalls/depict/genepathway/object:
     summary: >
       Fetch gene sets containing the gene that are enriched (at a specified level of significance) for associations
