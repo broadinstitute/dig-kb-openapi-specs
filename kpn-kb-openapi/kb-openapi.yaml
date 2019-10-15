@@ -494,21 +494,21 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [ data ]
+                required: [ data, header ]
                 properties:
                   data:
                     type: array
-                    items: { "$ref": "#/components/schemas/DepictEffectorGene" }
-              example:
-                data:
-                  - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                    pheno: T2D
-                    region_chr: "8"
-                    region_start: 117962512
-                    region_end: 118188953
-                    gene: SLC30A8
-                    pvalue: 0.000945569
-                    gene_ensemble_id: ENSG00000164756
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: string
   /testcalls/depict/region/object:
     summary: >
       Fetch effector gene predictions for a specified trait within a region, according to the DEPICT method
@@ -547,27 +547,21 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [ data ]
+                required: [ data, header ]
                 properties:
                   data:
                     type: array
-                    items: { "$ref": "#/components/schemas/DepictEnrichedTissue" }
-              example:
-                data:
-                  - dataset: GWAS_GIANT_active_dv4__BMI
-                    phenotype: BMI
-                    tissue: Serum
-                    mesh_second_level_term: Hemic and Immune Systems
-                    pvalue: 0.0136876
-                    tissue_name: serum
-                    tissue_uberon_id: ""
-                  - dataset: GWAS_GIANT_active_dv4__BMI
-                    phenotype: BMI
-                    tissue: Parietal Lobe
-                    mesh_second_level_term: Nervous System
-                    pvalue: 0.0297425
-                    tissue_name: parietal lobe
-                    tissue_uberon_id: ""
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: string
   /testcalls/depict/tissue/object:
     summary: Fetch tissues enriched for associations with a specified disease, according to the DEPICT method
     get:
@@ -611,29 +605,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/DepictGeneSet" }
-              example:
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  pathway_id: KEGG_PROSTATE_CANCER
-                  pathway_description: KEGG_PROSTATE_CANCER
-                  pvalue: 5.77832e-7
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  pathway_id: MP:0001698
-                  pathway_description: decreased embryo size
-                  pvalue: 7.56071e-7
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  pathway_id: KEGG_ACUTE_MYELOID_LEUKEMIA
-                  pathway_description: KEGG_ACUTE_MYELOID_LEUKEMIA
-                  pvalue: 9.97704e-7
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  pathway_id: ENSG00000105221
-                  pathway_description: AKT2 subnetwork
-                  pvalue: 0.00000114015
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 5
+                    maxItems: 5
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 5
+                    maxItems: 5
+                    items:
+                      type: string
   /testcalls/depict/pathway/object:
     summary: >
       Fetch gene sets enriched (at a specified level of significance) for associations with a specified disease,
@@ -688,39 +675,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/EcaviarCredibleSet" }
-              example:
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  credible_set_id: 8_118185025_G_A
-                  chromosome: "8"
-                  start_pos: 117935025
-                  end_pos: 118435025
-                  tissue: Brain_Cortex
-                  gene_ensemble_id: ENSG00000205002
-                  dbsnp_id: rs4629901
-                  var_id: 8_117955005_C_T
-                  gwas_z_score: 0.568
-                  eqtl_z_score: 4.46
-                  prob_in_causal_set: 0.516423
-                  clpp: 0.00449802
-                  gene: AARD
-                - dataset: GWAS_DIAMANTE_eu_dv2__T2D
-                  phenotype: T2D
-                  credible_set_id: 8_118185025_G_A
-                  chromosome: "8"
-                  start_pos: 117935025
-                  end_pos: 118435025
-                  tissue: Thyroid,
-                  gene_ensemble_id: ENSG00000205002
-                  dbsnp_id: rs3020180
-                  var_id: 8_117949756_G_A
-                  gwas_z_score: 0.896
-                  eqtl_z_score: 4.42
-                  prob_in_causal_set: 0.208669
-                  clpp: 0.00113929
-                  gene: AARD
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 15
+                    maxItems: 15
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 15
+                    maxItems: 15
+                    items:
+                      type: string
   /testcalls/ecaviar/colocalization{suffix}/object:
     summary: "Note: to get eCaviar use colocalization_expanded_max, while to get Coloc use colocalization_max."
     get:
@@ -783,36 +753,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/KnockoutPhenotype" }
-              example:
-                - Input: MGI:2442682
-                  Input_Type: MGI
-                  MGI_Gene_Marker_ID: MGI:2442682
-                  Symbol: Slc30a8
-                  Name: solute carrier family 30 (zinc transporter), member 8
-                  Feature_Type: protein coding gene
-                  MP_ID: MP:0003839
-                  Term: abnormal insulin clearance
-                  Human_gene: SLC30A8
-                - Input: MGI:2442682
-                  Input_Type: MGI
-                  MGI_Gene_Marker_ID: MGI:2442682
-                  Symbol: Slc30a8
-                  Name: solute carrier family 30 (zinc transporter), member 8
-                  Feature_Type: protein coding gene
-                  MP_ID: MP:0005217
-                  Term: abnormal pancreatic beta cell morphology
-                  Human_gene: SLC30A8
-                - Input: MGI:2442682
-                  Input_Type: MGI
-                  MGI_Gene_Marker_ID: MGI:2442682
-                  Symbol: Slc30a8
-                  Name: solute carrier family 30 (zinc transporter), member 8
-                  Feature_Type: protein coding gene
-                  MP_ID: MP:0005370
-                  Term: liver/biliary system phenotype
-                  Human_gene: SLC30A8
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 9
+                    maxItems: 9
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 9
+                    maxItems: 9
+                    items:
+                      type: string
   /testcalls/knockout/object:
     summary: Fetch a list of mouse phenotypes (from MGI database) associated with the gene
     get:
@@ -872,33 +828,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/LdScoreEnrichedTissue" }
-              example:
-                - tissue: Pancreas
-                  phenotype: T2D
-                  ancestry: European
-                  coeff: 3.07894147039e-9
-                  stderr: 9.55106227263e-10
-                  pvalue: 0.000632809231879
-                  tissue_name: pancreas
-                  tissue_uberon_id: UBERON:0001264
-                - tissue: A10.615.550.Mucous.Membrane
-                  phenotype: T2D
-                  ancestry: European
-                  coeff: -3.01805041521e-9
-                  stderr: 9.24799138468e-10
-                  pvalue: 0.999449707782
-                  tissue_name: null
-                  tissue_uberon_id: null
-                - tissue: Lung
-                  phenotype: T2D
-                  ancestry: European
-                  coeff: -2.98325557297e-9
-                  stderr: 7.12606248356e-10
-                  pvalue: 0.999985829382
-                  tissue_name: lung
-                  tissue_uberon_id: UBERON:0002048
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: string
   /testcalls/ldscore/tissue/object:
     summary: Fetch the tissues enriched for disease associations, according to LD-score regression
     get:
@@ -956,37 +901,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/MagmaAssociatedGene" }
-              example:
-                - gene: PPARG
-                  phenotype: CHOL
-                  ancestry: Mixed
-                  nsnps: 306
-                  zstat: 7.0971
-                  pvalue: 6.3691e-13
-                  gene_ensemble_id: ENSG00000132170
-                - gene: PPARG
-                  phenotype: BMI
-                  ancestry: Mixed
-                  nsnps: 215
-                  zstat: 6.5613
-                  pvalue: 2.6662e-11
-                  gene_ensemble_id: ENSG00000132170
-                - gene: SLC30A8
-                  phenotype: CHOL
-                  ancestry: Mixed
-                  nsnps: 343
-                  zstat: -0.6555
-                  pvalue: 0.74393
-                  gene_ensemble_id: ENSG00000164756
-                - gene: SLC30A8
-                  phenotype: BMI
-                  ancestry: Mixed
-                  nsnps: 320
-                  zstat: 1.7614
-                  pvalue: 0.039087
-                  gene_ensemble_id: ENSG00000164756
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 7
+                    maxItems: 7
+                    items:
+                      type: string
   /testcalls/magma/gene/object:
     summary: Fetch gene-level association results for a trait(s), according to MAGMA
     get:
@@ -1049,33 +979,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/GregorAnnotations" }
-              example:
-                - phenotype: T2D
-                  tissue_id: UBERON:0000006
-                  tissue: islet of Langerhans
-                  ancestry: EU
-                  p_value: 4.25849932680315e-20
-                  in_beb_index_snp: 125
-                  expected_in_beb_index_snp: 63.0121375000542
-                  annotation: Enhancer_Active_1
-                - phenotype: T2D
-                  tissue_id: UBERON:0014455
-                  tissue: subcutaneous adipose
-                  ancestry: AA
-                  p_value: 1.29739077991975
-                  in_beb_index_snp: 1
-                  expected_in_beb_index_snp: 0.0304601425793908
-                  annotation: Enhancer_Active_1
-                - phenotype: T2D
-                  tissue_id: UBERON:0000006
-                  tissue: islet of Langerhans
-                  ancestry: HS
-                  p_value: 1.73801915928969
-                  in_beb_index_snp: 4
-                  expected_in_beb_index_snp: 3.95384449839974
-                  annotation: Quiescent-low
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 8
+                    maxItems: 8
+                    items:
+                      type: string
   /graph/gregor/phenotype/object:
     summary: Fetch annotations enriched for trait associations, according to the GREGOR method
     get:
@@ -1136,39 +1055,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/MetaAssociations" }
-              example:
-                - p_value: 4.911e-80
-                  std_err: 0.0033
-                  beta: -0.107
-                  number_samples: 2247110
-                  chrom: "8"
-                  pos: 118184783
-                  ref: C
-                  alt: T
-                  phenotype: T2D
-                  phenotype_group: GLYCEMIC
-                - p_value: 2.624e-63
-                  std_err: 0.0047
-                  beta: -0.1077
-                  number_samples: 1181250
-                  chrom: "8"
-                  pos: 118184783
-                  ref: C
-                  alt: T
-                  phenotype: T2DadjBMI
-                  phenotype_group: GLYCEMIC
-                - p_value: 0.9961
-                  std_err: 0.0414
-                  beta: -0.0002
-                  number_samples: 1797
-                  chrom: "8"
-                  pos: 118184783
-                  ref: C
-                  alt: T
-                  phenotype: FGadjAgeSex
-                  phenotype_group: GLYCEMIC
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 10
+                    maxItems: 10
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 10
+                    maxItems: 10
+                    items:
+                      type: string
   /graph/meta/variant/object:
     summary: >
       Return the “bottom-line’ p-value for a variant, as calculated by the AMP-T2D Knowledge Portal’s analysis
@@ -1233,21 +1135,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/Phenotype" }
-              example:
-                - group: GLYCEMIC
-                  phenotype_id: 2hrCPEP
-                  name: Two-hour C-peptide
-                  is_dichotomous: false
-                - group: LIPIDS
-                  phenotype_id: 2hrFFA
-                  name: 2hr plasma free fatty acids
-                  is_dichotomous: false
-                - group: ISCHEMIC STROKE
-                  phenotype_id: toastUNDETER
-                  name: TOAST other undetermined
-                  is_dichotomous: true
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 4
+                    maxItems: 4
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 4
+                    maxItems: 4
+                    items:
+                      type: string
   /graph/phenotype/list/object:
     summary: Returns the list of phenotypes from the database
     get:
@@ -1294,27 +1197,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/RegionTissueAnnotation" }
-              example:
-                - start: 761400
-                  end: 761800
-                  chrom: "1"
-                  annotation: Transcription_Weak
-                  tissue_id: UBERON:0018112
-                  tissue_name: rectal smooth muscle
-                - start: 714600
-                  end: 715200
-                  chrom: "1"
-                  annotation: Promoter_Weak
-                  tissue_id: UBERON:0018112
-                  tissue_name: rectal smooth muscle
-                - start: 714600
-                  end: 715200
-                  chrom: "1"
-                  annotation: Promoter_Weak
-                  tissue_id: CL:0002553
-                  tissue_name: fibroblast of lung
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 6
+                    maxItems: 6
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 6
+                    maxItems: 6
+                    items:
+                      type: string
   /graph/region/variant/object:
     summary: Returns region/tissue annotations given a variant
     get:
@@ -1367,15 +1265,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/Tissue" }
-              example:
-                - tissue_id: CL:0000136
-                  tissue: adipocyte
-                - tissue_id: EFO:0001187
-                  tissue: HepG2
-                - tissue_id: UBERON:0018112
-                  tissue: rectal smooth muscle
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 2
+                    maxItems: 2
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 2
+                    maxItems: 2
+                    items:
+                      type: string
   /graph/tissue/list/object:
     summary: Returns the list of tissues from the database
     get:
@@ -1417,36 +1322,22 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: { "$ref": "#/components/schemas/PrioritizationVariant" }
-              example:
-                - var_id: 8_118185025_G_A
-                  p_value: 9.71e-121
-                  standard_error: 0.0033
-                  beta: -0.1075
-                  z_score: -23.365
-                  consequence: [ 3_prime_UTR_variant ]
-                  phenotype: T2D
-                  impact: MODIFIER
-                  most_del_score: 4
-                - var_id: 8_118185733_A_G
-                  p_value: 8.96e-117
-                  standard_error: 0.0033
-                  beta: -0.1052
-                  z_score: -22.972
-                  consequence: [ 3_prime_UTR_variant ]
-                  phenotype: T2D
-                  impact: MODIFIER
-                  most_del_score: 4
-                - var_id: 8_118185938_A_G
-                  p_value: 4.255e-18
-                  standard_error: 0.0035
-                  beta": 0.051
-                  z_score: 8.672
-                  consequence: [ 3_prime_UTR_variant ]
-                  phenotype: T2D
-                  impact: MODIFIER
-                  most_del_score: 4
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 9
+                    maxItems: 9
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 9
+                    maxItems: 9
+                    items:
+                      type: string
   /graph/prioritization/variant/object:
     summary: Returns all variants linked to phenotypes with their pValues in the given region
     get:
