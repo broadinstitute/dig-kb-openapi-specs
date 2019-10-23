@@ -133,6 +133,20 @@ components:
         prob_in_causal_set: { type: number }
         clpp: { type: number }
         gene: { type: string }
+    TissueGeneExpressions:
+      type: object
+      required: [ gene_ensemble_id, tissue, tstat, tissue_name, tissue_uberon_id, tissue_ensemble_id ]
+      properties:
+        gene_ensemble_id: { type: string }
+        tissue: { type: string }
+        tstat: { type: number }
+        tissue_name: { type: string }
+        tissue_uberon_id:
+          type: string
+          nullable: true
+        tissue_ensemble_id:
+          type: string
+          nullable: true
     KnockoutPhenotype:
       type: object
       required: [
@@ -258,6 +272,15 @@ components:
       schema: { type: string }
       example: AARD
     genes:
+      name: gene
+      in: query
+      required: false
+      explode: false
+      schema:
+        type: array
+        items: { type: string}
+      example: [ PPARG, SLC30A8 ]
+    genesRequired:
       name: gene
       in: query
       required: false
@@ -751,6 +774,83 @@ paths:
                     prob_in_causal_set: 0.208669
                     clpp: 0.00113929
                     gene: AARD
+  /testcalls/gtex/gene_weight/array:
+    summary: Returns gene/tissue expression data
+    get:
+      tags: [ GTEx ]
+      parameters:
+        - { "$ref": "#/components/parameters/genesRequired" }
+      responses:
+        default:
+          description: Returns gene/tissue expression data
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data, header ]
+                properties:
+                  data:
+                    type: array
+                    minItems: 5
+                    maxItems: 5
+                    items:
+                      type: array
+                      items: {}
+                  header:
+                    type: array
+                    minItems: 5
+                    maxItems: 5
+                    items:
+                      type: string
+  /testcalls/gtex/gene_weight/object:
+    summary: Returns gene/tissue expression data
+    get:
+      tags: [ GTEx ]
+      parameters:
+        - { "$ref": "#/components/parameters/genesRequired" }
+      responses:
+        default:
+          description: Returns gene/tissue expression data
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ data ]
+                properties:
+                  data:
+                    type: array
+                    items: { "$ref": "#/components/schemas/TissueGeneExpressions" }
+              example:
+                - gene_ensemble_id: ENSG00000132170
+                  tissue: Adipose_Subcutaneous
+                  tstat: 84.7512065083
+                  gene: PPARG
+                  tissue_name: subcutaneous adipose tissue
+                  tissue_uberon_id: UBERON:0002190
+                - gene_ensemble_id: ENSG00000132170
+                  tissue: Adipose_Visceral_(Omentum)
+                  tstat: 66.509654581
+                  gene: PPARG
+                  tissue_name: null
+                  tissue_uberon_id: null
+                - gene_ensemble_id: ENSG00000132170
+                  tissue: Adrenal_Gland
+                  tstat: -4.63304009523
+                  gene: PPARG
+                  tissue_name: adrenal gland
+                  tissue_uberon_id: UBERON:0002369
+                - gene_ensemble_id: ENSG00000132170
+                  tissue: Artery_Aorta
+                  tstat: -5.49795590039
+                  gene: PPARG
+                  tissue_name: aorta
+                  tissue_uberon_id: UBERON:0000947
+                - gene_ensemble_id: ENSG00000132170
+                  tissue: Artery_Coronary
+                  tstat: 0.414921182179
+                  gene: PPARG
+                  tissue_name: coronary artery
+                  tissue_uberon_id: UBERON:0001621
   /testcalls/knockout/array:
     summary: Fetch a list of mouse phenotypes (from MGI database) associated with the gene
     get:
