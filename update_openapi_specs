@@ -1,0 +1,1 @@
+sudo cp kpn-kb-openapi/kb-openapi.yaml /var/www/html/kpn-kb-openapi/kb-openapi.yaml
