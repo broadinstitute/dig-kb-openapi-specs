@@ -335,7 +335,7 @@ components:
       in: query
       required: true
       schema: { type: string }
-      example: 8_118184783_A_G
+      example: 8_118184783_C_T
     var_ids:
       name: var_id
       in: query
