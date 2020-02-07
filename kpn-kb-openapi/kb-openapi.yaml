@@ -548,7 +548,7 @@ paths:
         - { "$ref": "#/components/parameters/phenotype" }
       responses:
         default:
-          description: A list of potential effector genes and their p-values
+          description: p-value for association of a gene with a phenotype
           content:
             application/json:
               schema:
