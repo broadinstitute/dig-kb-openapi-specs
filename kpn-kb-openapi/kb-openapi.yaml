@@ -5,8 +5,7 @@ info:
     email: help@type2diabetesgenetics.org
     name: Dcc Team
     url: http://type2diabetesgenetics.org
-  description: This is the REST service maintained by the Broad Institute's Type 2
-    Diabetes Research group
+  description: This is the REST service maintained by the Broad Institute's Type 2 Diabetes Research group
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
@@ -377,7 +376,8 @@ paths:
   /getAggregatedDataSimple:
     get:
       tags: [ "Variants by chromosome region and phenotype" ]
-      description: retrieve variants based on chromosome region and phenotype (T2D,
+      description: >
+        retrieve variants based on chromosome region and phenotype (examples: T2D,
         BMI, FG, FI, TG, LDL, HDL, WHR, 2hrI, HIPC, CKD, CAD, HEIGHT, WAIST)
       operationId: findVariants
       parameters:
@@ -518,7 +518,7 @@ paths:
         - { "$ref": "#/components/parameters/phenotype" }
       responses:
         default:
-          description: A list of potential effector genes and their p-values
+          description: p-value for association of a gene with a phenotype
           content:
             application/json:
               schema:
