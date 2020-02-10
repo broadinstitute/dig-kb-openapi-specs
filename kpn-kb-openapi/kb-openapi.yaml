@@ -322,7 +322,7 @@ components:
       schema:
         type: string
         enum: ["colocalization", "colocalization_max"]
-      example: "_max"
+      example: "colocalization_max"
     limit:
       name: limit
       in: query
