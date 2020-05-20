@@ -1560,4 +1560,64 @@ paths:
       responses:
         default:
           description: Some result
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ is_error, stats ]
+                properties:
+                  is_error:
+                    type: boolean
+                  stats:
+                    type: object
+                    required: [
+                      pValue, beta, stdError, numCases, numControls, numCaseCarriers, numControlCarriers,
+                      numCaseVariants, numControlVariants, numInputVariants, ciLevel, ciLower, ciUpper
+                    ]
+                    properties:
+                      pValue:
+                        type: number
+                      beta:
+                        type: number
+                      stdError:
+                        type: number
+                      numCases:
+                        type: integer
+                      numControls:
+                        type: integer
+                      numCaseCarriers:
+                        type: integer
+                      numControlCarriers:
+                        type: integer
+                      numCaseVariants:
+                        type: integer
+                      numControlVariants:
+                        type: integer
+                      numInputVariants:
+                        type: integer
+                      ciLevel:
+                        type: number
+                      ciLower:
+                        type: number
+                      ciUpper:
+                        type: number
+              example:
+                {
+                  "is_error" : false,
+                  "stats" : {
+                    "pValue" : 1.1738198926100658e-12,
+                    "beta" : -0.11170692099131059,
+                    "stdError" : 0.015714740833166402,
+                    "numCases" : 19852,
+                    "numControls" : 23273,
+                    "numCaseCarriers" : 8826,
+                    "numControlCarriers" : 10911,
+                    "numCaseVariants" : 10385,
+                    "numControlVariants" : 12987,
+                    "numInputVariants" : 2,
+                    "ciLevel" : 0.95,
+                    "ciLower" : -0.14250781302431673,
+                    "ciUpper" : -0.08090602895830444
+                  }
+                }
 
