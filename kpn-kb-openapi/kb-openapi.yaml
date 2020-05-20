@@ -27,6 +27,7 @@ tags:
   - name: Region
   - name: Tissue list
   - name: Variant prioritization
+  - name: Burden
 components:
   schemas:
     Error:
@@ -1499,3 +1500,64 @@ paths:
                     phenotype: T2D
                     impact: MODIFIER
                     most_del_score: 4
+  /burden/v1:
+    summary: >
+      Conduct an aggregate association analysis between a specified set of variants and a specified phenotype.
+      Phenotype is regressed on the combined variant score
+    post:
+      tags: [ "Burden" ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [
+                covariates, dataset_id, variants, ci_level, phenotype, calc_ci, filters, allele_type, samples
+              ]
+              properties:
+                covariates:
+                  type: array
+                  items:
+                    type: string
+                dataset_id:
+                  type: string
+                variants:
+                  type: array
+                  items:
+                    type: string
+                ci_level:
+                  type: number
+                phenotype:
+                  type: string
+                operation:
+                  type: string
+                  enum: [ sum, max, binary ]
+                calc_ci:
+                  type: boolean
+                filters:
+                  type: array
+                  items:
+                    type: object
+                allele_type:
+                  type: string
+                  enum: [ bi, multi ]
+                samples:
+                  type: array
+                  items:
+                    type: string
+            example:
+              {
+                "covariates" : [ "C1", "C2", "C3", "SEX" ],
+                "dataset_id" : "samples_55k_multi",
+                "variants" : [ "20_16223957_A_G", "8_118184783_C_T", "8_118165282_C_T" ],
+                "ci_level" : 0.95,
+                "phenotype" : "t2d",
+                "calc_ci" : true,
+                "filters" : [],
+                "allele_type" : "multi",
+                "samples" : []
+              }
+      responses:
+        default:
+          description: Some result
+
