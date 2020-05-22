@@ -1552,6 +1552,7 @@ paths:
                 "variants" : [ "20_16223957_A_G", "8_118184783_C_T", "8_118165282_C_T" ],
                 "ci_level" : 0.95,
                 "phenotype" : "t2d",
+                "operation": "sum",
                 "calc_ci" : true,
                 "filters" : [],
                 "allele_type" : "multi",
